@@ -1,11 +1,6 @@
 name: Build USDX
 on:
   workflow_dispatch:
-    inputs:
-      name:
-        description: 'Person to greet'
-        required: true
-        default: 'Mona the Octocat'
 
 jobs:
   build:
@@ -25,9 +20,7 @@ jobs:
       - run: cd USDX
 
       - run: ./configure
+        working-directory: USDX
 
       - run: make
-
-      - name: Print the input name to STDOUT
-        run: |
-          echo "Hello ${{ github.event.inputs.name }}!"
+        working-directory: USDX
