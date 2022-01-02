@@ -1,26 +1,40 @@
 name: Build USDX
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - "main"
 
 jobs:
-  build:
+  flatpak:
+    name: "Flatpak"
     runs-on: ubuntu-latest
-
+    container:
+      image: bilelmoussaoui/flatpak-github-actions:gnome-40
+      options: --privileged
     steps:
-      - run: >
-          sudo apt-get update && sudo apt-get install git fpc libsdl2-dev
-          libsdl2-image-dev libsdl2-image-2.0-0 libsdl2-2.0-0 libsdl2-mixer-2.0-0
-          libsdl2-mixer-dev libsdl2-net-2.0-0 libsdl2-net-dev libsdl2-ttf-2.0-0
-          libsdl2-ttf-dev libsdl2-gfx-1.0-0 libsdl2-gfx-dev ffmpeg libavdevice-dev
-          libsqlite3-0 libsqlite3-dev libpcre3 libpcre3-dev ttf-dejavu fonts-freefont-ttf
-          portaudio19-dev lua5.1-dev libpng16-16 libopencv-highgui-dev libprojectm-dev
-
       - run: git clone https://github.com/UltraStar-Deluxe/USDX
 
-      - run: cd USDX
+      - uses: bilelmoussaoui/flatpak-github-actions/flatpak-builder@v4
+        with:
+          bundle: palette.flatpak
+          manifest-path: ./USDX/dists/flatpak/eu.usdx.UltraStarDeluxe.yaml
+          cache-key: flatpak-builder-${{ github.sha }}
 
-      - run: ./configure
-        working-directory: USDX
+  # build:
+  #   runs-on: ubuntu-latest
 
-      - run: make
-        working-directory: USDX
+  #   steps:
+  #     - run: >
+  #         sudo apt-get update && sudo apt-get install git fpc libsdl2-dev
+  #         libsdl2-image-dev libsdl2-image-2.0-0 libsdl2-2.0-0 libsdl2-mixer-2.0-0
+  #         libsdl2-mixer-dev libsdl2-net-2.0-0 libsdl2-net-dev libsdl2-ttf-2.0-0
+  #         libsdl2-ttf-dev libsdl2-gfx-1.0-0 libsdl2-gfx-dev ffmpeg libavdevice-dev
+  #         libsqlite3-0 libsqlite3-dev libpcre3 libpcre3-dev ttf-dejavu fonts-freefont-ttf
+  #         portaudio19-dev lua5.1-dev libpng16-16 libopencv-highgui-dev libprojectm-dev
+
+  #     - run: |
+  #         git clone https://github.com/UltraStar-Deluxe/USDX
+  #         cd USDX/
+  #         ./configure
+  #         make
