@@ -13,11 +13,11 @@ jobs:
       image: bilelmoussaoui/flatpak-github-actions:gnome-40
       options: --privileged
     steps:
-      - run: git clone https://github.com/UltraStar-Deluxe/USDX
+      - run: git clone https://github.com/UltraStar-Deluxe/USDX .
 
       - uses: bilelmoussaoui/flatpak-github-actions/flatpak-builder@v4
         with:
-          manifest-path: ./USDX/dists/flatpak/eu.usdx.UltraStarDeluxe.yaml
+          manifest-path: ./dists/flatpak/eu.usdx.UltraStarDeluxe.yaml
           cache-key: flatpak-builder-${{ github.sha }}
 
       - run: |
